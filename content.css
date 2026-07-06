@@ -35,3 +35,17 @@
 .g2gh-arrow {
   opacity: 0.7;
 }
+
+/* Dark theme. Graphite sets data-theme="dark" on <html>. Light values above
+   are too low-contrast on a dark header (muted text vanishes, black border
+   is invisible). */
+[data-theme="dark"] .g2gh-inline {
+  color: #c9d1d9;
+  border-color: rgba(255, 255, 255, 0.22);
+}
+
+[data-theme="dark"] .g2gh-inline:hover {
+  background: rgba(255, 255, 255, 0.08);
+  color: #f0f3f6;
+  border-color: rgba(255, 255, 255, 0.33);
+}
