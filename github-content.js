@@ -25,13 +25,16 @@ const EXTERNAL_ARROW =
   '<path fill="currentColor" d="M5.5 3.5a.75.75 0 000 1.5h4.44L3.22 11.72a.75.75 0 101.06 1.06L11 6.06v4.44a.75.75 0 001.5 0v-6a.75.75 0 00-.75-.75h-6z"/>' +
   "</svg>";
 
-// The PR number span inside the title h1. GitHub uses stable data-component
-// attributes so we find the h1 that way, then locate the muted PR number span.
+// The visible "#123" span in the PR header — we insert the button right after
+// it. GitHub used to render it inside the title h1 and now renders it in a
+// sibling suffix span, so we search the h1's container rather than the h1
+// itself. The h1's data-component attribute is stable; the surrounding CSS
+// module class names are hashed per deploy, so we don't rely on them.
 function findAnchor() {
-  const prNumSpan = document.querySelector(
-    'h1[data-component="PH_Title"] .fgColor-muted'
-  );
-  return prNumSpan?.parentElement || null;
+  const titleArea = document.querySelector(
+    'h1[data-component="PH_Title"]'
+  )?.parentElement;
+  return titleArea?.querySelector(".fgColor-muted") || null;
 }
 
 function buildButton(graphiteUrl) {
@@ -61,7 +64,7 @@ function syncButton() {
   if (!anchor) return;
 
   if (!button) {
-    anchor.appendChild(buildButton(graphiteUrl));
+    anchor.insertAdjacentElement("afterend", buildButton(graphiteUrl));
   } else if (button.href !== graphiteUrl) {
     button.href = graphiteUrl;
   }
